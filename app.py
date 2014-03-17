@@ -1,5 +1,6 @@
 from cgi import parse_qs
 import os
+import re
 import sys
 import wsgiref.util
 #from urlparse import urlparse
@@ -14,23 +15,39 @@ del path
 
 
 import recent
+import routes
+
+# We define the valid routes of the bitcoin uwsgi application using "routes":
+router = routes.Mapper()
+
+router.connect(None, '/bitcoin/recent/', handler = recent.handle)
 
 
 def application(env, start_response):
 
-    return recent.handle(env, start_response)
-    #d = parse_qs(env['QUERY_STRING'])    
+    # We extract the URL of the request made to this server:
+    base_uri = wsgiref.util.application_uri(env)[:-1]           # We strip off the trailing / since we will need it to be part of the url we extract
+    full_uri = wsgiref.util.request_uri(env)
 
-    #response = "<p>Request URI: %s - %s</p>" % (wsgiref.util.request_uri(env, include_query=False), wsgiref.util.application_uri(env))
+    m = re.match(base_uri + "(/.*)", full_uri)
 
-    #if any( [k in d for k in ['s', 'l']] ):
+    if m:
 
-        #response += str(d)
-            
-        #start_response('200 OK', [('Content-Type', 'text/html')])
-        #return [response]
+        url = m.group(1)            # The extracted url with the domain part removed. It is now in a form that routes can use
+        route = router.match(url)       # We use the router to match the url to the connections established earlier
 
-    #else:
+        if route:           # A route matching the incoming URL exists. We use its handler function
 
-        #start_response('400 Bad Request', [('Content-Type', 'text/html')])
-        #return [response + "<h1>ERROR: 400 Bad Request</h1><p><i>Reason:</i> Only 's' (prices since timestamp) and 'l' (last interval of prices) are allowed as GET parameters.</p>"]
+            return route['handler'](env, start_response)
+
+        else:
+
+            start_response('400 Bad Request', [('Content-Type', 'text/html')])
+
+            return ["<h1>ERROR: 400 Bad Request</h1><p><i>Reason:</i> Invalid path.</p>"]
+
+    else:
+
+        start_response('400 Bad Request', [('Content-Type', 'text/html')])
+
+        return ["<h1>ERROR: 400 Bad Request</h1><p><i>Reason:</i> URL Regex extraction from full URI failed.</p>"]
