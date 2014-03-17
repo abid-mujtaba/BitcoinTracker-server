@@ -27,7 +27,15 @@ def handle(start_response, route):
     timestring = datetime.fromtimestamp(now).strftime('%H:%M')
 
 
-    response = "</br>\n<p><b>Current Price:</b> {} - ${:.2f} - ${:.2f}</p>\n</br>\n".format(timestring, buy, sell)
+    response = """<!DOCTYPE HTML>
+                  <head>
+                    <link rel="stylesheet" type="text/css" href="../static/css/styles.css"/>
+                  </head>
+                  <body>
+                    </br>
+                    <p><b>Current Price:</b> {} - ${:.2f} - ${:.2f}</p>
+                    </br>
+                  </body>""".format(timestring, buy, sell)
 
     start_response('200 OK', [('Content-Type', 'text/html')])
 
