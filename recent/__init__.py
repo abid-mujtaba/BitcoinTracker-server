@@ -9,30 +9,33 @@ import sqlite3
 import time
 import urllib2
 
+import error
 
-TICKER_URL = "https://www.bitstamp.net/api/ticker/"
 
-
-def handle(env, start_response):
+def handle(start_response, route):
     """
-    We pass in the environment that comes in with the HTTP Request and a function "start_response" which when called triggers the start of the response.
+    We pass in the function "start_response" which when called triggers the start of the response.
     """
 
-    data = json.load(urllib2.urlopen(TICKER_URL))
+    if 'num' in route:
 
-    buy = float(data["ask"])
-    sell = float(data["bid"])
+        num = int(route['num'])
+        
+        if num <= 0:        # Invalid number requested by user
 
-    now = int(time.time())        # Get current unix time
-    timestring = datetime.fromtimestamp(now).strftime('%H:%M')
+            return error.handle(start_response, '400 Bad Request', "<i>num</i> should be greater than 0.")
 
+    else:
 
-    response = "</br>\n<p><b>Current Price:</b> {} - ${:.2f} - ${:.2f}</p>\n</br>\n".format(timestring, buy, sell)
+        num = 10            # The default value of num when none is specified
+
 
     conn = sqlite3.connect('/home/ubuntu/public_html/uwsgi/bitcoin/data.db')
     cursor = conn.cursor()
 
-    for values in cursor.execute('''SELECT "time", "buy", "sell" FROM "prices" ORDER BY "time" DESC LIMIT 10'''):
+    response = "</br>"
+
+    for values in cursor.execute('''SELECT "time", "buy", "sell" FROM "prices" ORDER BY "time" DESC LIMIT ?''', (num,)):
 
         timestamp = values[0]
         buy = values[1]

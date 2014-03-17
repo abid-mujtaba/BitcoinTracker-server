@@ -1,6 +1,7 @@
 from cgi import parse_qs
 import os
 import re
+import routes
 import sys
 import wsgiref.util
 #from urlparse import urlparse
@@ -14,13 +15,16 @@ if not path in sys.path:
 del path
 
 
+import current
+import error
 import recent
-import routes
 
 # We define the valid routes of the bitcoin uwsgi application using "routes":
 router = routes.Mapper()
 
 router.connect(None, '/bitcoin/recent/', handler = recent.handle)
+router.connect(None, R'/bitcoin/recent/{num:\d+}/', handler = recent.handle)
+router.connect(None, '/bitcoin/current/', handler = current.handle)
 
 
 def application(env, start_response):
@@ -38,16 +42,12 @@ def application(env, start_response):
 
         if route:           # A route matching the incoming URL exists. We use its handler function
 
-            return route['handler'](env, start_response)
+            return route['handler'](start_response, route)
 
         else:
 
-            start_response('400 Bad Request', [('Content-Type', 'text/html')])
-
-            return ["<h1>ERROR: 400 Bad Request</h1><p><i>Reason:</i> Invalid path.</p>"]
+            return error.handle(start_response, '400 Bad Request', "Invalid path.")
 
     else:
 
-        start_response('400 Bad Request', [('Content-Type', 'text/html')])
-
-        return ["<h1>ERROR: 400 Bad Request</h1><p><i>Reason:</i> URL Regex extraction from full URI failed.</p>"]
+        return error.handle(start_response, '400 Bad Request', "Regex extraction from full URI failed.")
