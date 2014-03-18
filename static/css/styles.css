@@ -2,3 +2,20 @@ body
 {
     margin-left:50px;
 }
+
+p.price
+{
+    width:400px;
+}
+
+span.price
+{
+    float:right;
+}
+
+span.hyphen
+{
+    width:30px;
+    display: inline-block;
+    text-align: center;
+}
