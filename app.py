@@ -14,10 +14,13 @@ if not path in sys.path:
 
 del path
 
+# Modules that represent unique end-points in the web application:
 
 import current
 import error
+import graph
 import recent
+import since
 
 # We define the valid routes of the bitcoin uwsgi application using "routes":
 router = routes.Mapper()
@@ -25,6 +28,8 @@ router = routes.Mapper()
 router.connect(None, '/bitcoin/recent/', handler = recent.handle)
 router.connect(None, R'/bitcoin/recent/{num:\d+}/', handler = recent.handle)
 router.connect(None, '/bitcoin/current/', handler = current.handle)
+router.connect(None, R'/bitcoin/api/since/{timestamp:\d+}/', handler = since.handle)
+router.connect(None, '/bitcoin/graph/', handler = graph.handle)
 
 
 def application(env, start_response):
