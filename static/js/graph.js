@@ -39,16 +39,48 @@ $(function() {
 
         // Create the chart
         $('#graph').highcharts('StockChart', {
-            
 
             rangeSelector : {
-                selected : 1,
-                inputEnabled: $('#graph').width() > 480
+
+                buttons: [{
+                    type: 'minute',
+                    count: 60,
+                    text: '1h'
+                }, {
+                    type: 'minute',
+                    count: 120,
+                    text: '2h'
+                }, {
+                    type: 'minute',
+                    count: 360,
+                    text: '6h'
+                }, {
+                    type: 'minute',
+                    count: 720,
+                    text: '12h'
+                }, {
+                    type: 'day',
+                    count: 1,
+                    text: '1d'
+                }, {
+                    type: 'all',
+                    text: 'All'
+                }],
+
+                selected : 4,
+                inputEnabled: true,
+
             },
 
             title : {
                 text : 'BTC Prices'
             },
+            
+            // Specify the colors used by the data series.
+            colors: [
+                '#ff0000',
+                '#009922',
+            ],
             
             series : [{
                 name : 'Buy',
