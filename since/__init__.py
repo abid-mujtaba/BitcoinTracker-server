@@ -36,13 +36,15 @@ def handle(start_response, route):
     data = []
 
     # We query the database for all data-points recorded after the specified timestamp.
-    for values in cursor.execute('''SELECT "time", "buy", "sell" FROM "prices" WHERE "time" > ?''', (timestamp,)):
+    for values in cursor.execute('''SELECT "time", "buy", "sell", "wa_buy", "wa_sell" FROM "prices" WHERE "time" > ?''', (timestamp,)):
 
         ts = values[0]                  # ts: timestamp
         buy = values[1]
         sell = values[2]
+        wbuy = values[3]
+        wsell = values[4]
 
-        data.append({'t': ts, 'b': buy, 's': sell})
+        data.append({'t': ts, 'b': buy, 's': sell, 'wb': wbuy, 'ws': wsell})
 
     conn.close()
 
