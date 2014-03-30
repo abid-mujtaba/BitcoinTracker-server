@@ -19,6 +19,7 @@ import current
 import error
 import graph
 import recent
+import api.current
 import api.since
 
 # We define the valid routes of the bitcoin uwsgi application using "routes":
@@ -28,6 +29,7 @@ router.connect(None, '/bitcoin/recent/', handler = recent.handle)
 router.connect(None, R'/bitcoin/recent/{num:\d+}/', handler = recent.handle)
 router.connect(None, '/bitcoin/current/', handler = current.handle)
 router.connect(None, R'/bitcoin/api/since/{timestamp:\d+}/', handler = api.since.handle)
+router.connect(None, '/bitcoin/api/current/', handler = api.current.handle)
 router.connect(None, '/bitcoin/graph/', handler = graph.handle)
 
 

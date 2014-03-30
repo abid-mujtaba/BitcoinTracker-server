@@ -114,7 +114,7 @@ $(function() {
             {
                 name: 'W. Buy',
                 data: wbuy,
-                enableMouseTracking: false,         // Stops inclusing in tooltip
+                enableMouseTracking: false,         // Stops including in tooltip
             },
             {
                 name: 'W. Sell',
@@ -122,14 +122,35 @@ $(function() {
                 enableMouseTracking: false,
             }],
 
-            tooltip: { valueDecimals: 2 }
+            tooltip: { valueDecimals: 2 },
         });
     });
 
 
-    $('#header').bind("click", function() {
-        alert("Hello, World!");
-    });
+    // We setup a repeated function call every 1 minute to update the prices
+
+    setInterval(function() {
+
+        // We make an AJAX POST call to fetch the current price. We use POST here because POSTs are never cached.
+
+        $.post("http://www.abid-mujtaba.name:8080/bitcoin/api/current/", {}, function(data_string, status) {
+
+            var data = JSON.parse(data_string);     // The GET call returns a string which we parse as a JSON object to get a dictionary.
+
+            update_prices(data['b'], data['s']);        // Update Current Price header
+
+            var chart = $('#graph').highcharts();           // Gain access to the chart object for modification
+
+            var t = data['t'] * 1000;           // Convert time to milliseconds as required by HighCharts
+
+            chart.series[0].addPoint([t, data['b']], false);
+            chart.series[1].addPoint([t, data['s']], false);
+            chart.series[2].addPoint([t, data['wb']], false);
+            chart.series[3].addPoint([t, data['ws']], false);
+
+            chart.redraw();         // Tell the chart to update itself
+        });
+    }, 1 * 60 * 1000);      // Set interval in milliseconds
 
 });
 
