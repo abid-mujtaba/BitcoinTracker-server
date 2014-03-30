@@ -1,10 +1,9 @@
-from cgi import parse_qs
 import os
 import re
 import routes
 import sys
 import wsgiref.util
-#from urlparse import urlparse
+
 
 # We start by appending the current folder to the system path to allow importing custom modules:
 path = os.path.abspath(os.path.dirname(__file__))           # Append the absolute path of the current folder to the python path
@@ -20,7 +19,7 @@ import current
 import error
 import graph
 import recent
-import since
+import api.since
 
 # We define the valid routes of the bitcoin uwsgi application using "routes":
 router = routes.Mapper()
@@ -28,7 +27,7 @@ router = routes.Mapper()
 router.connect(None, '/bitcoin/recent/', handler = recent.handle)
 router.connect(None, R'/bitcoin/recent/{num:\d+}/', handler = recent.handle)
 router.connect(None, '/bitcoin/current/', handler = current.handle)
-router.connect(None, R'/bitcoin/api/since/{timestamp:\d+}/', handler = since.handle)
+router.connect(None, R'/bitcoin/api/since/{timestamp:\d+}/', handler = api.since.handle)
 router.connect(None, '/bitcoin/graph/', handler = graph.handle)
 
 

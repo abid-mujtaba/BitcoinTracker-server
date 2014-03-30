@@ -43,8 +43,7 @@ $(function() {
 
     // Fetch the current (latest) buy and sell prices and displays them in the header (top-right of the page) using CSS ids to access the relevant HTML elements
 
-    $('#buy').text(" $" + buy[buy.length - 1][1].toFixed(2));
-    $('#sell').text(" $" + sell[sell.length - 1][1].toFixed(2));
+    update_prices(buy[buy.length-1][1], sell[sell.length - 1][1]);
 
 
         // Create the chart
@@ -126,4 +125,17 @@ $(function() {
             tooltip: { valueDecimals: 2 }
         });
     });
+
+
+    $('#header').bind("click", function() {
+        alert("Hello, World!");
+    });
+
 });
+
+
+function update_prices(buy, sell)       // Function that updates the header price information with the (float) values supplied
+{
+    $('#buy').text(" $" + buy.toFixed(2));
+    $('#sell').text(" $" + sell.toFixed(2));
+}

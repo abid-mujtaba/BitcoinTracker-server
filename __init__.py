@@ -1,0 +1,1 @@
+# Placed here to make the folder 'bitcoin' a package. This will facilitate relative imports in its children.

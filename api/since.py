@@ -3,13 +3,10 @@
 #
 # This script handles the /bitcoin/api/since/{num}/ API end-point, fetching data from the sqlite3 database.
 
-from datetime import datetime
 import json
 import sqlite3
-import time
-import urllib2
 
-import error
+from bitcoin import error
 
 
 def handle(start_response, route):
@@ -52,4 +49,4 @@ def handle(start_response, route):
 
     start_response('200 OK', [('Content-Type', 'text/html')])
 
-    return [response] 
+    return [response]
