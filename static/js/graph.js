@@ -41,6 +41,11 @@ $(function() {
         wsell.push( [ time, datum['ws'] ] );
     }
 
+    // Fetch the current (latest) buy and sell prices and displays them in the header (top-right of the page) using CSS ids to access the relevant HTML elements
+
+    $('#buy').text(" $" + buy[buy.length - 1][1].toFixed(2));
+    $('#sell').text(" $" + sell[sell.length - 1][1].toFixed(2));
+
 
         // Create the chart
         $('#graph').highcharts('StockChart', {
@@ -97,9 +102,6 @@ $(function() {
                     enabled: true,
                     radius: 2
                 },
-                tooltip: {
-                    valueDecimals: 2
-                }
             },
             {
                 name : 'Sell',
@@ -109,24 +111,19 @@ $(function() {
                     enabled: true,
                     radius: 2
                 },
-                tooltip: {
-                    valueDecimals: 2
-                }
             },
             {
                 name: 'W. Buy',
                 data: wbuy,
-                tooltip: {
-                    valueDecimals: 2
-                }
+                enableMouseTracking: false,         // Stops inclusing in tooltip
             },
             {
                 name: 'W. Sell',
                 data: wsell,
-                tooltip: {
-                    valueDecimals: 2
-                }
-            }]
+                enableMouseTracking: false,
+            }],
+
+            tooltip: { valueDecimals: 2 }
         });
     });
 });
