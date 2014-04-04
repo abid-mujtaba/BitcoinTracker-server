@@ -1,4 +1,22 @@
+var flag_title_buy = false;
+var gbuy, gsell;
+
+
 $(function() {
+
+    // Extend String class to have a format function to simplify string construction from variables  (Source: http://journalofasoftwaredev.wordpress.com/2011/10/30/replicating-string-format-in-javascript/)
+    String.prototype.format = function()
+    {
+        var content = this;
+    
+        for (var i=0; i < arguments.length; i++)
+        {
+            var replacement = '{' + i + '}';
+            content = content.replace(replacement, arguments[i]);  
+        }    
+
+        return content;
+    };
 
     // We force Highcharts to use local time for the time-axis:
     Highcharts.setOptions({
@@ -43,86 +61,95 @@ $(function() {
 
     // Fetch the current (latest) buy and sell prices and displays them in the header (top-right of the page) using CSS ids to access the relevant HTML elements
 
-    update_prices(buy[buy.length-1][1], sell[sell.length - 1][1]);
+    var cbuy = buy[buy.length-1][1];        // Get last buy and sell prices
+    var csell = sell[sell.length-1][1]
+
+    update_prices(cbuy, csell);
+    update_title(cbuy, csell);              // We update the document title to display the latest sell price
+
+    gbuy = buy;         // Store the latest prices globally (used for changing document title)
+    gsell = sell;
 
 
-        // Create the chart
-        $('#graph').highcharts('StockChart', {
 
-            rangeSelector : {
+    // Create the chart
+    $('#graph').highcharts('StockChart', {
 
-                buttons: [{
-                    type: 'minute',
-                    count: 60,
-                    text: '1h'
-                }, {
-                    type: 'minute',
-                    count: 120,
-                    text: '2h'
-                }, {
-                    type: 'minute',
-                    count: 360,
-                    text: '6h'
-                }, {
-                    type: 'minute',
-                    count: 720,
-                    text: '12h'
-                }, {
-                    type: 'day',
-                    count: 1,
-                    text: '1d'
-                }, {
-                    type: 'all',
-                    text: 'All'
-                }],
+        rangeSelector : {
 
-                selected : 2,       // Index of 'buttons' array to specify which range to use initially
-                inputEnabled: true,
-
-            },
-
-            title : {
-                text : 'BTC Prices'
-            },
-            
-            // Specify the colors used by the data series.
-            colors: [
-                '#ff0000',
-                '#009922',
-                '#ff0000',
-                '#009922'
-            ],
-            
-            series : [{
-                name : 'Buy',
-                data : buy,
-                lineWidth: 1,
-                marker: {
-                    enabled: true,
-                    radius: 2
-                },
-            },
-            {
-                name : 'Sell',
-                data: sell,
-                lineWidth: 1,
-                marker: {
-                    enabled: true,
-                    radius: 2
-                },
-            },
-            {
-                name: 'W. Buy',
-                data: wbuy,
-                enableMouseTracking: false,         // Stops including in tooltip
-            },
-            {
-                name: 'W. Sell',
-                data: wsell,
-                enableMouseTracking: false,
+            buttons: [{
+                type: 'minute',
+                count: 60,
+                text: '1h'
+            }, {
+                type: 'minute',
+                count: 120,
+                text: '2h'
+            }, {
+                type: 'minute',
+                count: 360,
+                text: '6h'
+            }, {
+                type: 'minute',
+                count: 720,
+                text: '12h'
+            }, {
+                type: 'day',
+                count: 1,
+                text: '1d'
+            }, {
+                type: 'all',
+                text: 'All'
             }],
 
-            tooltip: { valueDecimals: 2 },
+            selected : 2,       // Index of 'buttons' array to specify which range to use initially
+            inputEnabled: true,
+
+        },
+
+        title : {
+            text : 'BTC Prices'
+        },
+
+        // Specify the colors used by the data series.
+        colors: [
+            '#ff0000',
+            '#009922',
+            '#ff0000',
+            '#009922'
+        ],
+
+        series : [{
+            name : 'Buy',
+            data : buy,
+            lineWidth: 1,
+            marker: {
+                enabled: true,
+                radius: 2
+            },
+        },
+        {
+            name : 'Sell',
+            data: sell,
+            lineWidth: 1,
+            marker: {
+                enabled: true,
+                radius: 2
+            },
+        },
+        {
+            name: 'W. Buy',
+            data: wbuy,
+            enableMouseTracking: false,         // Stops including in tooltip
+        },
+        {
+            name: 'W. Sell',
+            data: wsell,
+            enableMouseTracking: false,
+        }],
+
+        tooltip: { valueDecimals: 2 },
+
         });
     });
 
@@ -138,6 +165,7 @@ $(function() {
             var data = JSON.parse(data_string);     // The GET call returns a string which we parse as a JSON object to get a dictionary.
 
             update_prices(data['b'], data['s']);        // Update Current Price header
+            update_title(data['b'], data['s']);
 
             var chart = $('#graph').highcharts();           // Gain access to the chart object for modification
 
@@ -159,4 +187,20 @@ function update_prices(buy, sell)       // Function that updates the header pric
 {
     $('#buy').text(" $" + buy.toFixed(2));
     $('#sell').text(" $" + sell.toFixed(2));
+
+    gbuy = buy;         // Store the latest buy and sell prices globally
+    gsell = sell;
+}
+
+
+function update_title(buy, sell)
+{
+    if (flag_title_buy)
+    {
+        document.title = "Bitcoin: {0}".format(buy);
+    }
+    else
+    {
+        document.title = "Bitcoin: {0}".format(sell);
+    }
 }
