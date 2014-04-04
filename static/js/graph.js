@@ -67,8 +67,8 @@ $(function() {
     update_prices(cbuy, csell);
     update_title(cbuy, csell);              // We update the document title to display the latest sell price
 
-    gbuy = buy;         // Store the latest prices globally (used for changing document title)
-    gsell = sell;
+    gbuy = cbuy;         // Store the latest prices globally (used for changing document title)
+    gsell = csell;
 
 
 
@@ -179,6 +179,20 @@ $(function() {
             chart.redraw();         // Tell the chart to update itself
         });
     }, 1 * 60 * 1000);      // Set interval in milliseconds
+
+
+    // We set up callbacks for clicking the current buy and sell price, using these to change the price displayed in the document title
+    $('#buy').click(function() {
+
+        flag_title_buy = true;          // Set the flag to indicate that the buy price is to be displayed
+        update_title(gbuy, gsell);      // Update the title using the global buy and sell prices to make the change
+    });
+
+    $('#sell').click(function() {
+
+        flag_title_buy = false;
+        update_title(gbuy, gsell);
+    });
 
 });
 
