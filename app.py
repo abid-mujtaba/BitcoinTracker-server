@@ -31,6 +31,8 @@ router.connect(None, '/bitcoin/current/', handler = current.handle)
 router.connect(None, R'/bitcoin/api/since/{timestamp:\d+}/', handler = api.since.handle)
 router.connect(None, '/bitcoin/api/current/', handler = api.current.handle)
 router.connect(None, '/bitcoin/graph/', handler = graph.handle)
+router.connect(None, '/bitcoin/graph/buy/', handler = graph.handle_buy)
+router.connect(None, '/bitcoin/graph/sell/', handler = graph.handle_sell)
 
 
 def application(env, start_response):
