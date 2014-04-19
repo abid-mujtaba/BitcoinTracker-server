@@ -41,8 +41,6 @@ $(function() {
     // We create lists to contain the graph data points. We will populate them below:
     var buy = [];
     var sell = [];
-    var wbuy = [];
-    var wsell = [];
 
     // Access list of price points:
     var dArray = data['data'];
@@ -55,8 +53,6 @@ $(function() {
 
         buy.push( [ time, datum['b'] ] );
         sell.push( [ time, datum['s'] ] );
-        wbuy.push( [ time, datum['wb'] ] );
-        wsell.push( [ time, datum['ws'] ] );
     }
 
     // Fetch the current (latest) buy and sell prices and displays them in the header (top-right of the page) using CSS ids to access the relevant HTML elements
@@ -136,16 +132,6 @@ $(function() {
                 enabled: true,
                 radius: 2
             },
-        },
-        {
-            name: 'W. Buy',
-            data: wbuy,
-            enableMouseTracking: false,         // Stops including in tooltip
-        },
-        {
-            name: 'W. Sell',
-            data: wsell,
-            enableMouseTracking: false,
         }],
 
         tooltip: { valueDecimals: 2 },
@@ -173,8 +159,6 @@ $(function() {
 
             chart.series[0].addPoint([t, data['b']], false);
             chart.series[1].addPoint([t, data['s']], false);
-            chart.series[2].addPoint([t, data['wb']], false);
-            chart.series[3].addPoint([t, data['ws']], false);
 
             chart.redraw();         // Tell the chart to update itself
         });

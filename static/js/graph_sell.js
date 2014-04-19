@@ -167,7 +167,7 @@ $(function() {
 
 function update_prices(buy, s_sma, s_lma, s_delta)       // Function that updates the header price information with the (float) values supplied
 {
-    $('#buy').text(" $" + buy.toFixed(2));
+    $('#sell').text(" $" + buy.toFixed(2));
     $('#sma').text(" $" + s_sma.toFixed(2));
     $('#lma').text(" $" + s_lma.toFixed(2));
     $('#delta').text(" $" + s_delta.toFixed(2));
