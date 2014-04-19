@@ -103,6 +103,23 @@ $(function() {
             text : 'BTC Buy Prices'
         },
 
+        // Move y-axis to the opposite (right) side and shifts if slightly more right to keep it off the chart
+        yAxis: {
+            opposite: true,
+            offset: 30,
+        },
+
+        xAxis: {
+            events: {
+                afterSetExtremes: function (event) {        // This function is called after the x-range has been modified.
+
+                    var delta_chart = $('#delta_graph').highcharts();       // We access the delta graph chart.
+
+                    delta_chart.xAxis[0].setExtremes(event.min, event.max);     // We set its x-range to be equal that of the top chart
+                },
+            },
+        },
+
         // Specify the colors used by the data series.
         colors: [
             '#ff0000',
@@ -135,6 +152,58 @@ $(function() {
         tooltip: { valueDecimals: 2 },
 
         });
+
+
+        // Create the smaller delta graph:
+        $('#delta_graph').highcharts('StockChart', {
+
+            title: {
+                text: '',
+                style: {display: 'none'},
+            },
+
+            yAxis: {
+                opposite: true,
+                offset: 30,
+            },
+
+            legend: {
+                enabled: false,
+            },
+
+            navigator: {
+                enabled: false,
+            },
+
+            scrollbar: {
+                enabled: false,
+            },
+
+            rangeSelector: {
+                enabled: false,
+            },
+
+            series: [{
+                name: 'Delta',
+                data: b_delta,
+                type: 'area',
+            }],
+
+
+            // We setup an event handler to make the delta graph x-range match that of the main graph when the page is launched initially
+            chart: {
+                events: {
+                    load: function(event) {       // Function triggered after the graph is loaded.
+
+                        var main_chart = $('#graph').highcharts();      // Get handler on main graph on top
+
+                        this.xAxis[0].setExtremes(main_chart.xAxis[0].min, main_chart.xAxis[0].max);        // We use x-range of main chart to change the x-range of this, the delta chart, so that both match.
+                    },
+                },
+            },
+
+        });
+
     });
 
 

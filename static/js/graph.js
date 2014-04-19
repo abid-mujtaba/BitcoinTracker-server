@@ -107,6 +107,12 @@ $(function() {
             text : 'BTC Prices'
         },
 
+        // Move y-axis to the opposite (right) side and shifts if slightly more right to keep it off the chart
+        yAxis: {
+            opposite: true,
+            offset: 30,
+        },
+
         // Specify the colors used by the data series.
         colors: [
             '#ff0000',
