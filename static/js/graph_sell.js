@@ -1,7 +1,3 @@
-var flag_title_buy = false;
-var gbuy, gsell;
-
-
 $(function() {
 
     // Extend String class to have a format function to simplify string construction from variables  (Source: http://journalofasoftwaredev.wordpress.com/2011/10/30/replicating-string-format-in-javascript/)
@@ -33,16 +29,16 @@ $(function() {
     var threshold = now - (86400 * 2);
 
     // Construct the URL that will fetch the price data.
-    var data_url = 'http://www.abid-mujtaba.name:8080/bitcoin/api/since/'.concat(threshold, '/');
+    var data_url = 'http://www.abid-mujtaba.name:8080/bitcoin/api/sell/since/'.concat(threshold, '/');
 
 
     $.getJSON(data_url, function(data) {
 
     // We create lists to contain the graph data points. We will populate them below:
-    var buy = [];
     var sell = [];
-    var wbuy = [];
-    var wsell = [];
+    var s_sma = [];
+    var s_lma = [];
+    var s_delta = [];
 
     // Access list of price points:
     var dArray = data['data'];
@@ -53,22 +49,18 @@ $(function() {
         var datum = dArray[i];
         var time = datum['t'] * 1000;
 
-        buy.push( [ time, datum['b'] ] );
-        sell.push( [ time, datum['s'] ] );
-        wbuy.push( [ time, datum['wb'] ] );
-        wsell.push( [ time, datum['ws'] ] );
+        sell.push( [ time, datum['sell'] ] );
+        s_sma.push( [ time, datum['s_sma'] ] );
+        s_lma.push( [ time, datum['s_lma'] ] );
+        s_delta.push( [ time, datum['s_delta'] ] );
     }
 
     // Fetch the current (latest) buy and sell prices and displays them in the header (top-right of the page) using CSS ids to access the relevant HTML elements
 
-    var cbuy = buy[buy.length-1][1];        // Get last buy and sell prices
-    var csell = sell[sell.length-1][1]
+    var ii = sell.length - 1;        // Index of last element of array
 
-    update_prices(cbuy, csell);
-    update_title(cbuy, csell);              // We update the document title to display the latest sell price
-
-    gbuy = cbuy;         // Store the latest prices globally (used for changing document title)
-    gsell = csell;
+    update_prices(sell[ii][1], s_sma[ii][1], s_lma[ii][1], s_delta[ii][1]);      // Update displayed data and document title with latest value
+    update_title(sell[ii][1]);
 
 
 
@@ -108,29 +100,19 @@ $(function() {
         },
 
         title : {
-            text : 'BTC Prices'
+            text : 'BTC Buy Prices'
         },
 
         // Specify the colors used by the data series.
         colors: [
-            '#ff0000',
             '#009922',
             '#ff0000',
-            '#009922'
+            '#002299'
         ],
 
         series : [{
-            name : 'Buy',
-            data : buy,
-            lineWidth: 1,
-            marker: {
-                enabled: true,
-                radius: 2
-            },
-        },
-        {
             name : 'Sell',
-            data: sell,
+            data : sell,
             lineWidth: 1,
             marker: {
                 enabled: true,
@@ -138,13 +120,15 @@ $(function() {
             },
         },
         {
-            name: 'W. Buy',
-            data: wbuy,
+            name: 'SMA',
+            data: s_sma,
+            lineWidth: 1,
             enableMouseTracking: false,         // Stops including in tooltip
         },
         {
-            name: 'W. Sell',
-            data: wsell,
+            name: 'LMA',
+            data: s_lma,
+            lineWidth: 1,
             enableMouseTracking: false,
         }],
 
@@ -160,61 +144,37 @@ $(function() {
 
         // We make an AJAX POST call to fetch the current price. We use POST here because POSTs are never cached.
 
-        $.post("http://www.abid-mujtaba.name:8080/bitcoin/api/current/", {}, function(data_string, status) {
+        $.post("http://www.abid-mujtaba.name:8080/bitcoin/api/sell/current/", {}, function(data_string, status) {
 
             var data = JSON.parse(data_string);     // The GET call returns a string which we parse as a JSON object to get a dictionary.
 
-            update_prices(data['b'], data['s']);        // Update Current Price header
-            update_title(data['b'], data['s']);
+            update_prices(data['sell'], data['s_sma'], data['s_lma'], data['s_delta']);        // Update Current Price header
+            update_title(data['sell']);
 
             var chart = $('#graph').highcharts();           // Gain access to the chart object for modification
 
             var t = data['t'] * 1000;           // Convert time to milliseconds as required by HighCharts
 
-            chart.series[0].addPoint([t, data['b']], false);
-            chart.series[1].addPoint([t, data['s']], false);
-            chart.series[2].addPoint([t, data['wb']], false);
-            chart.series[3].addPoint([t, data['ws']], false);
+            chart.series[0].addPoint([t, data['sell']], false);
+            chart.series[1].addPoint([t, data['s_sma']], false);
+            chart.series[2].addPoint([t, data['s_lma']], false);
 
             chart.redraw();         // Tell the chart to update itself
         });
     }, 1 * 60 * 1000);      // Set interval in milliseconds
-
-
-    // We set up callbacks for clicking the current buy and sell price, using these to change the price displayed in the document title
-    $('#buy').click(function() {
-
-        flag_title_buy = true;          // Set the flag to indicate that the buy price is to be displayed
-        update_title(gbuy, gsell);      // Update the title using the global buy and sell prices to make the change
-    });
-
-    $('#sell').click(function() {
-
-        flag_title_buy = false;
-        update_title(gbuy, gsell);
-    });
-
 });
 
 
-function update_prices(buy, sell)       // Function that updates the header price information with the (float) values supplied
+function update_prices(buy, s_sma, s_lma, s_delta)       // Function that updates the header price information with the (float) values supplied
 {
     $('#buy').text(" $" + buy.toFixed(2));
-    $('#sell').text(" $" + sell.toFixed(2));
-
-    gbuy = buy;         // Store the latest buy and sell prices globally
-    gsell = sell;
+    $('#sma').text(" $" + s_sma.toFixed(2));
+    $('#lma').text(" $" + s_lma.toFixed(2));
+    $('#delta').text(" $" + s_delta.toFixed(2));
 }
 
 
-function update_title(buy, sell)
+function update_title(sell)
 {
-    if (flag_title_buy)
-    {
-        document.title = "Bitcoin: {0}".format(buy);
-    }
-    else
-    {
-        document.title = "Bitcoin: {0}".format(sell);
-    }
+    document.title = "Bitcoin: {0}".format(sell);
 }

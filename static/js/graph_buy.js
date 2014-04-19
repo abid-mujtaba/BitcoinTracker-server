@@ -155,10 +155,9 @@ $(function() {
 
             var t = data['t'] * 1000;           // Convert time to milliseconds as required by HighCharts
 
-            chart.series[0].addPoint([t, data['b']], false);
-            chart.series[1].addPoint([t, data['s']], false);
-            chart.series[2].addPoint([t, data['wb']], false);
-            chart.series[3].addPoint([t, data['ws']], false);
+            chart.series[0].addPoint([t, data['buy']], false);
+            chart.series[1].addPoint([t, data['b_sma']], false);
+            chart.series[2].addPoint([t, data['b_lma']], false);
 
             chart.redraw();         // Tell the chart to update itself
         });
