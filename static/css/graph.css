@@ -15,7 +15,13 @@
     z-index:-1;
 }
 
-#header
+p.alignleft
+{
+    float: left;
+    margin-left: 5%;
+}
+
+p.alignright
 {
     float: right;
     margin-right: 5%;
