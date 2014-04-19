@@ -19,6 +19,8 @@ import current
 import error
 import graph
 import recent
+import api.buy.current
+import api.buy.since
 import api.current
 import api.since
 
@@ -28,8 +30,13 @@ router = routes.Mapper()
 router.connect(None, '/bitcoin/recent/', handler = recent.handle)
 router.connect(None, R'/bitcoin/recent/{num:\d+}/', handler = recent.handle)
 router.connect(None, '/bitcoin/current/', handler = current.handle)
+
 router.connect(None, R'/bitcoin/api/since/{timestamp:\d+}/', handler = api.since.handle)
+router.connect(None, R'/bitcoin/api/buy/since/{timestamp:\d+}/', handler=api.buy.since.handle)
+
 router.connect(None, '/bitcoin/api/current/', handler = api.current.handle)
+router.connect(None, '/bitcoin/api/buy/current/', handler = api.buy.current.handle)
+
 router.connect(None, '/bitcoin/graph/', handler = graph.handle)
 router.connect(None, '/bitcoin/graph/buy/', handler = graph.handle_buy)
 router.connect(None, '/bitcoin/graph/sell/', handler = graph.handle_sell)
