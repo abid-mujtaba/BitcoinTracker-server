@@ -1,2 +1,5 @@
 # Compiled python code:
 *.pyc
+
+# Ignore PyCharm files
+.idea/
