@@ -1,5 +1,2 @@
 # Compiled python code:
 *.pyc
-
-# Ignore the Sqlite3 Database
-data.db
