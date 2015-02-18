@@ -31,6 +31,6 @@ cd in to the virtualenv folder.
 
 Activiate the virtualenv by running: ``source bin/activate``
 
-Install ``uwsgi`` using the ``pip`` script that comes with the virtualenv: ``bin/pip --install uwsgi``. (This version has python support built in).
+Install ``uwsgi`` using the ``pip`` script that comes with the virtualenv: ``bin/pip install uwsgi``. (This version has python support built in).
 
 Confirm installation by running: ``bin/uwsgi --version``.
