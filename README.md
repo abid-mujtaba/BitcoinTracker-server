@@ -45,6 +45,17 @@ Such a file may be present in ``/etc/nginx`` but I don't have even read-access t
 Now when you restart nginx it will read the additional configuration, find ``uwsgi_params`` and start correctly passing information back and forth to the uwsgi process.
 
 
+### How to launch nginx and uwsgi
+
+``/usr/sbin/nginx -c ~/.config/nginx/nginx.conf >/dev/null 2>&1 &``
+
+``~/www/bitcoin/venv/bin/uwsgi --ini ~/www/bitcoin/config/bitcoin-uwsgi.ini >/dev/null 2>&1 &``
+
+The above command suppresses both stdout and stderr and backgrounds the process.
+
+
+
+
 ### How to stop nginx and uwsgi
 
 ``killall nginx``
