@@ -5,4 +5,4 @@ def handle(start_response, status_code, error_message):
 
     start_response(status_code, [('Content-Type', 'text/html')])
 
-    return ["<h1>ERROR: {}</h1><p><i>Reason:</i> {}</p>".format(status_code, error_message)]
+    return ["<h1>ERROR: {}</h1><p><i>Reason:</i> {}</p><br/><p><i>(Bitcoin UWSGI Server)</i></p>".format(status_code, error_message)]
