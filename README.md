@@ -12,7 +12,7 @@ Thankfully Whatbox has installed and provides access to an nginx utility so I ca
 
 /usr/sbin/nginx -c <path to config> &> /dev/null
 
-(the nginx config file is included in this repo).
+(the nginx config file is included in this repo as well as the mimes.conf file that is required for CSS to work).
 
 
 uwsgi on the other hand does come pre-installed (like nginx) but it doesn't have python support compiled in to it. This means I had to roll out my own version of uwsgi in userspace. This was made remarkably easy thanks to virtualenv.
