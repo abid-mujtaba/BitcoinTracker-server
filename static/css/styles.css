@@ -5,17 +5,10 @@ body
 
 p.price
 {
-    width:400px;
+    width:200px;
 }
 
-span.price
+.right
 {
-    float:right;
-}
-
-span.hyphen
-{
-    width:30px;
-    display: inline-block;
-    text-align: center;
+    text-align:right;
 }
