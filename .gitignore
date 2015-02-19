@@ -3,3 +3,6 @@
 
 # Ignore PyCharm files
 .idea/
+
+# Ignore the .sync files required for 'make'
+.sync/
