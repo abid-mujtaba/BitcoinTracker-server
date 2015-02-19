@@ -32,6 +32,6 @@ sync: .sync/py .sync/uwsgi_py .sync/config .sync/templates .sync/static
 	rsync -av --progress templates/* $(DEST)/templates/
 	@touch .sync/templates
 
-.sync/static: $(wildcad ./static/*/*)
+.sync/static: $(wildcard ./static/*/*)
 	rsync -r -av --progress static/* $(DEST)/static/
 	@touch .sync/static
