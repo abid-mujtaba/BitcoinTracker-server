@@ -23,7 +23,7 @@ def handle(start_response, route):
     conn = sqlite3.connect('/home/abid/www/bitcoin/bitcoin.db')
     cursor = conn.cursor()
 
-    response = "</br>"
+    records = []        # Construct a list of tuples with each tuple of the format (time, buy, sell)
 
     for values in cursor.execute('''SELECT "time", "buy", "sell" FROM "prices" ORDER BY "time" DESC LIMIT ?''', (num,)):
 
@@ -33,7 +33,11 @@ def handle(start_response, route):
 
         ts = common.format_time(t)
 
-        response += "<p>{} - ${:.2f} - ${:.2f}</p>\n".format(ts, buy, sell)
+        records.append((ts, buy, sell))
+
+    template = common.get_template(__file__, 'recent.html')
+
+    response = template.render({'rows': records}).encode("utf-8")
 
     conn.close()
 

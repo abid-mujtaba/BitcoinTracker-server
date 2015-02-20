@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <!-- Since this template is used by both /recent/ and /recent/<num>/ we need two relative paths to get to the stylesheet -->
+    <link rel="stylesheet" type="text/css" href="../static/css/styles.css"/>
+    <link rel="stylesheet" type="text/css" href="../../static/css/styles.css"/>
+</head>
+
+<body>
+    <br/>
+    <table id="prices">
+        <tr>
+            <th>Time</th>
+            <th>Buy</th>
+            <th>Sell</th>
+        </tr>
+            {% for row in rows %}
+                <tr>
+                    <td>{{row.0}}</td>
+                    <td>{{row.1}}</td>
+                    <td>{{row.2}}</td>
+                </tr>
+            {% endfor %}
+    </table>
+</body>
+</html>
