@@ -36,6 +36,14 @@ p.price
     padding: 5px;
 }
 
+#prices td {
+    text-align: right;
+}
+
+#prices td.center {
+    text-align: center;
+}
+
 #prices th {
     font-size: 1.1em;
     text-align: left;
