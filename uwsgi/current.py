@@ -1,8 +1,6 @@
 # This script handles the /bitcoin/recent/ end-point, fetching data from the sqlite3 database.
 
-import jinja2
 import json
-import os
 import time
 import urllib2
 
@@ -26,15 +24,7 @@ def handle(start_response, route):
 
     ts = common.format_time(now)
 
-    # Load the jinja2 template in preparation for rendering:
-    templateLoader = jinja2.FileSystemLoader( searchpath="/" )      # We specify that we will be using absolute paths to specify the location of the template file
-    templateEnv = jinja2.Environment( loader=templateLoader )
-
-    parent = common.get_parent_dir(__file__)      # Get absolute path of parent directory of current directory
-
-    TEMPLATE_FILE = os.path.join(parent, 'templates/current.html')
-
-    template = templateEnv.get_template( TEMPLATE_FILE )         # Load template from filesystem
+    template = common.get_template(__file__, 'current.html')
 
     vars = {"time": ts, "buy": buy, "sell": sell}       # Create dictionary of variables to be substituted
     response = template.render( vars ).encode("utf-8")          # jinja2 template renderer returns unicode so we explicitly encode it as utf-8 before returning it so that the browser can read it.
