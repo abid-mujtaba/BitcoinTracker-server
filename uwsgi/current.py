@@ -1,12 +1,12 @@
 # This script handles the /bitcoin/recent/ end-point, fetching data from the sqlite3 database.
 
-from datetime import datetime as dt
 import jinja2
 import json
 import os
-import pytz
 import time
 import urllib2
+
+import common
 
 
 TICKER_URL = "https://www.bitstamp.net/api/ticker/"
@@ -23,18 +23,14 @@ def handle(start_response, route):
     sell = float(data["bid"])
 
     now = int(time.time())        # Get current unix time
-    ut = pytz.utc.localize(dt.utcfromtimestamp(now))        # Localize time as UTC
-    tz = pytz.timezone('Asia/Karachi')                      # Get timezone for PST
-    t = tz.normalize(ut.astimezone(tz))                     # Convert time to PST
 
-    ts = t.strftime('%I:%M %p')                             # Get formatted string for the time
+    ts = common.format_time(now)
 
     # Load the jinja2 template in preparation for rendering:
     templateLoader = jinja2.FileSystemLoader( searchpath="/" )      # We specify that we will be using absolute paths to specify the location of the template file
     templateEnv = jinja2.Environment( loader=templateLoader )
 
-    cwd = os.path.dirname(__file__)                             # Folder containing file (current directory)
-    parent = os.path.abspath(os.path.join(cwd, os.pardir))      # Get absolute path of parent directory of current directory
+    parent = common.get_parent_dir(__file__)      # Get absolute path of parent directory of current directory
 
     TEMPLATE_FILE = os.path.join(parent, 'templates/current.html')
 
