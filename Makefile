@@ -1,7 +1,7 @@
 ROOT=/home/abid/www/bitcoin
 DEST=sbox:$(ROOT)
 
-.PHONY: sync
+.PHONY: sync, restart
 
 # Our goal is for sync to copy files only when they have been altered and not have to copy all files all the time since that required mutiple invocations of rsync.
 # The way 'make' works this requires that the targets be NOT phony i.e. they be actual files.
@@ -35,3 +35,8 @@ sync: .sync/py .sync/uwsgi_py .sync/config .sync/templates .sync/static
 .sync/static: $(wildcard ./static/*/*)
 	rsync -r -av --progress static/* $(DEST)/static/
 	@touch .sync/static
+
+
+# Restart the uwsgi server
+restart:
+	ssh sbox "killall -s INT uwsgi; $(ROOT)/venv/start_uwsgi"
