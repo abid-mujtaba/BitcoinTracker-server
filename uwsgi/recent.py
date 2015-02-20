@@ -33,7 +33,7 @@ def handle(start_response, route):
 
         ts = common.format_time(t)
 
-        records.append((ts, buy, sell))
+        records.append({'time': ts, 'buy': buy, 'sell': sell})
 
     template = common.get_template(__file__, 'recent.html')
 

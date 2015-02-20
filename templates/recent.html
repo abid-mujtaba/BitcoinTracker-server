@@ -16,9 +16,9 @@
         </tr>
             {% for row in rows %}
                 <tr>
-                    <td class="center">{{row.0}}</td>
-                    <td>{{'%0.2f' | format(row.1|float)}}</td>
-                    <td>{{'%0.2f' | format(row.2|float)}}</td>
+                    <td class="center">{{row.time}}</td>
+                    <td>{{'%0.2f' | format(row.buy|float)}}</td>
+                    <td>{{'%0.2f' | format(row.sell|float)}}</td>
                 </tr>
             {% endfor %}
     </table>
