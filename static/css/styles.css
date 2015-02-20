@@ -1,14 +1,19 @@
 body
 {
-    margin-left:50px;
+    margin-left: 50px;
 }
 
 p.price
 {
-    width:200px;
+    width: 250px;
 }
 
 .right
 {
-    text-align:right;
+    text-align: right;
+}
+
+.floatr
+{
+    float: right;
 }
