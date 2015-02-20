@@ -1,5 +1,6 @@
 body
 {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     margin-left: 50px;
 }
 
@@ -16,4 +17,35 @@ p.price
 .floatr
 {
     float: right;
+}
+
+
+/*
+    #prices refers to objects with id 'prices' which can only be one object in an html file (and its descendants)
+    We assume that the 'prices' id is given to a table and so we style all elements of the table below
+*/
+
+#prices {
+    width: 40%;
+    border-collapse: collapse;
+}
+
+#prices td, #prices th {
+    font-size: 1em;
+    border: 1px solid #98bf21;
+    padding: 5px;
+}
+
+#prices th {
+    font-size: 1.1em;
+    text-align: left;
+    padding-top: 5px;
+    padding-bottom: 4px;
+    background-color: #A7C942;
+    color: #ffffff;
+}
+
+#prices tr.alt td {     /* tr.alt means this styling is applied to alternate rows only */
+    color: #000000;
+    background-color: #EAF2D3;
 }

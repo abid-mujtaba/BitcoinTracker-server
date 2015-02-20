@@ -7,7 +7,7 @@
 <body>
     <p class="price"><b>Current Bitcoin Price:</b><span class="floatr">({{time}})</span></p>
 
-    <p class="price right"><b>Buy:</b> ${{buy}}</p>
-    <p class="price right"><b>Sell:</b> ${{sell}}</p>
+    <p class="price right"><b>Buy:</b> ${{'%0.2f' | format(buy|float)}}</p>
+    <p class="price right"><b>Sell:</b> ${{'%0.2f' | format(sell|float)}}</p>
 </body>
 </html>
