@@ -39,4 +39,4 @@ sync: .sync/py .sync/uwsgi_py .sync/config .sync/templates .sync/static
 
 # Restart the uwsgi server
 restart:
-	ssh sbox "killall -s INT uwsgi; $(ROOT)/venv/start_uwsgi"
+	ssh sbox "killall -s INT uwsgi && rm $(ROOT)/uwsgi.log && $(ROOT)/venv/start_uwsgi"
