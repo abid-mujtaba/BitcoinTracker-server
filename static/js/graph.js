@@ -18,6 +18,9 @@ $(function() {
         return content;
     };
 
+    // Fetch the current price and show it in the header
+    fetch_current_price();
+
     // We force Highcharts to use local time for the time-axis:
     Highcharts.setOptions({
         global: {
@@ -36,6 +39,7 @@ $(function() {
     var data_url = 'http://www.abid-mujtaba.name:8080/bitcoin/api/since/'.concat(threshold, '/');
 
 
+/*
     $.getJSON(data_url, function(data) {
 
     // We create lists to contain the graph data points. We will populate them below:
@@ -144,6 +148,7 @@ $(function() {
 
         });
     });
+*/
 
 
     // We setup a repeated function call every 1 minute to update the prices
@@ -151,23 +156,8 @@ $(function() {
     setInterval(function() {
 
         // We make an AJAX POST call to fetch the current price. We use POST here because POSTs are never cached.
+        fetch_current_price();
 
-        $.post("http://www.abid-mujtaba.name:8080/bitcoin/api/current/", {}, function(data_string, status) {
-
-            var data = JSON.parse(data_string);     // The GET call returns a string which we parse as a JSON object to get a dictionary.
-
-            update_prices(data['b'], data['s']);        // Update Current Price header
-            update_title(data['b'], data['s']);
-
-            var chart = $('#graph').highcharts();           // Gain access to the chart object for modification
-
-            var t = data['t'] * 1000;           // Convert time to milliseconds as required by HighCharts
-
-            chart.series[0].addPoint([t, data['b']], false);
-            chart.series[1].addPoint([t, data['s']], false);
-
-            chart.redraw();         // Tell the chart to update itself
-        });
     }, 1 * 60 * 1000);      // Set interval in milliseconds
 
 
@@ -185,6 +175,16 @@ $(function() {
     });
 
 });
+
+
+function fetch_current_price()
+{
+    $.post("https://marzipan.whatbox.ca:3983/bitcoin/api/current/", {}, function(data, status) {
+
+    update_prices(data['b'], data['s']);        // Update Current Price header
+    update_title(data['b'], data['s']);
+    });
+}
 
 
 function update_prices(buy, sell)       // Function that updates the header price information with the (float) values supplied

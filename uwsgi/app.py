@@ -20,6 +20,7 @@ logger.setLevel(logging.DEBUG)
 
 # Modules that represent unique end-points in the web application:
 
+import api
 import current
 import error
 import graph
@@ -35,8 +36,9 @@ router.connect(None, '/bitcoin/current/', handler=current.handle)
 # router.connect(None, R'/bitcoin/api/since/{timestamp:\d+}/', handler = api.since.handle)
 # router.connect(None, R'/bitcoin/api/buy/since/{timestamp:\d+}/', handler=api.buy.since.handle)
 # router.connect(None, R'/bitcoin/api/sell/since/{timestamp:\d+}/', handler=api.sell.since.handle)
-#
-# router.connect(None, '/bitcoin/api/current/', handler = api.current.handle)
+
+router.connect(None, '/bitcoin/api/current/', handler=api.handle_current)
+
 # router.connect(None, '/bitcoin/api/buy/current/', handler = api.buy.current.handle)
 # router.connect(None, '/bitcoin/api/sell/current/', handler = api.sell.current.handle)
 
