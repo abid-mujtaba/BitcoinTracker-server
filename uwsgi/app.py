@@ -33,14 +33,8 @@ router.connect(None, '/bitcoin/recent/', handler=recent.handle)
 router.connect(None, R'/bitcoin/recent/{num:\d+}/', handler=recent.handle)
 router.connect(None, '/bitcoin/current/', handler=current.handle)
 
-# router.connect(None, R'/bitcoin/api/since/{timestamp:\d+}/', handler = api.since.handle)
-# router.connect(None, R'/bitcoin/api/buy/since/{timestamp:\d+}/', handler=api.buy.since.handle)
-# router.connect(None, R'/bitcoin/api/sell/since/{timestamp:\d+}/', handler=api.sell.since.handle)
-
+router.connect(None, R'/bitcoin/api/since/{timestamp:\d+}/', handler=api.handle_since)
 router.connect(None, '/bitcoin/api/current/', handler=api.handle_current)
-
-# router.connect(None, '/bitcoin/api/buy/current/', handler = api.buy.current.handle)
-# router.connect(None, '/bitcoin/api/sell/current/', handler = api.sell.current.handle)
 
 router.connect(None, '/bitcoin/graph/', handler=graph.handle)
 
