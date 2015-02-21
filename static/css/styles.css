@@ -44,6 +44,10 @@ p.price
     text-align: center;
 }
 
+#prices td.bold {
+    font-weight: bold;
+}
+
 #prices th {
     font-size: 1.1em;
     text-align: left;

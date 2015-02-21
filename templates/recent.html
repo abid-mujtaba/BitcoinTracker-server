@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <!-- Since this template is used by both /recent/ and /recent/<num>/ we need two relative paths to get to the stylesheet -->
+    {# Since this template is used by both /recent/ and /recent/num/ we need two relative paths to get to the stylesheet #}
     <link rel="stylesheet" type="text/css" href="../static/css/styles.css"/>
     <link rel="stylesheet" type="text/css" href="../../static/css/styles.css"/>
 </head>
@@ -17,8 +17,10 @@
             {% for row in rows %}
                 <tr>
                     <td class="center">{{row.time}}</td>
-                    <td>{{'%0.2f' | format(row.buy|float)}}</td>
-                    <td>{{'%0.2f' | format(row.sell|float)}}</td>
+
+                    {# We only want the max/min values in bold so we use a conditional if to determine whether the 'td' should havethe bold class or not #}
+                    <td {{'class="bold"' if row.min_buy}}>{{'%0.2f' | format(row.buy|float)}}</td>
+                    <td {{'class="bold"' if row.max_sell}}>{{'%0.2f' | format(row.sell|float)}}</td>
                 </tr>
             {% endfor %}
     </table>

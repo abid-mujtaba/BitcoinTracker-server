@@ -35,6 +35,11 @@ def handle(start_response, route):
 
         records.append({'time': ts, 'buy': buy, 'sell': sell})
 
+    bi, si = maxima(records)          # get the indices of the maxima
+
+    records[bi]['min_buy'] = True           # Append boolean values to the records corresponding to the maxima
+    records[si]['max_sell'] = True
+
     template = common.get_template(__file__, 'recent.html')
 
     response = template.render({'rows': records}).encode("utf-8")
@@ -44,3 +49,34 @@ def handle(start_response, route):
     start_response('200 OK', [('Content-Type', 'text/html')])
 
     return [response]
+
+
+def maxima(records):
+    """
+    Calculate the indices of the records in the provided list with the min buy and max sell prices.
+
+    :param records: List of dictionaries containing price information.
+    :return: A tuple containing the indices for the records with min buy and max sell price in the input list.
+    """
+
+    bi = 0
+    si = 0
+
+    bmin = records[0]['buy']
+    smax = records[0]['sell']
+
+    for ii in range(1, len(records)):
+
+        record = records[ii]
+
+        if record['buy'] < bmin:
+
+            bi = ii
+            bmin = record['buy']
+
+        if record['sell'] > smax:
+
+            si = ii
+            smax = record['sell']
+
+    return bi, si
