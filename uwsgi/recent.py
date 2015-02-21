@@ -20,7 +20,8 @@ def handle(start_response, route):
         num = 12            # The default value of num when none is specified
 
 
-    conn = sqlite3.connect('/home/abid/www/bitcoin/bitcoin.db')
+    db = common.get_db()
+    conn = sqlite3.connect(db)
     cursor = conn.cursor()
 
     records = []        # Construct a list of tuples with each tuple of the format (time, buy, sell)
@@ -40,7 +41,7 @@ def handle(start_response, route):
     records[bi]['min_buy'] = True           # Append boolean values to the records corresponding to the maxima
     records[si]['max_sell'] = True
 
-    template = common.get_template(__file__, 'recent.html')
+    template = common.get_template('recent.html')
 
     response = template.render({'rows': records}).encode("utf-8")
 

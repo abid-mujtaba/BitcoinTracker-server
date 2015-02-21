@@ -8,13 +8,12 @@ import os
 import pytz
 
 
-def get_parent_dir(f):
+def get_parent_dir():
     """
-    :param f: os.path file object (usually __file__)
-    :return: Absolute path of the parent of the directory containing the specified file.
+    :return: Absolute path of the parent of the directory of this file.
     """
 
-    cwd = os.path.dirname(f)
+    cwd = os.path.dirname(__file__)     # Here __file__ refers to this file 'common.py'. The parent directory is calculated with reference to this file
     return os.path.abspath(os.path.join(cwd, os.pardir))
 
 
@@ -31,9 +30,8 @@ def format_time(t):
     return tc.strftime('%I:%M %p')                           # Get formatted string for the time
 
 
-def get_template(f, name):
+def get_template(name):
     """
-    :param f: File object (usually __file__)
     :param name: Name of the template file e.g. 'current.html'
     :return: A template object which can be passed arguments and rendered.
     """
@@ -47,8 +45,18 @@ def get_template(f, name):
 
     templateEnv = jinja2.Environment( loader=templateLoader, line_statement_prefix='#', line_comment_prefix='##' )
 
-    parent = get_parent_dir(f)      # Get absolute path of parent directory of current directory
+    parent = get_parent_dir()      # Get absolute path of parent directory of current directory which contains this file
 
     template_file = os.path.join(parent, 'templates', name)
 
     return templateEnv.get_template(template_file)         # Load template from filesystem
+
+
+def get_db():
+    """
+    :return: A file object referring to the database file: bitcoin.db
+    """
+
+    parent = get_parent_dir()
+
+    return os.path.join(parent, 'bitcoin.db')

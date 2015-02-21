@@ -24,7 +24,7 @@ def handle(start_response, route):
 
     ts = common.format_time(now)
 
-    template = common.get_template(__file__, 'current.html')
+    template = common.get_template('current.html')
 
     vars = {"time": ts, "buy": buy, "sell": sell}       # Create dictionary of variables to be substituted
     response = template.render( vars ).encode("utf-8")          # jinja2 template renderer returns unicode so we explicitly encode it as utf-8 before returning it so that the browser can read it.

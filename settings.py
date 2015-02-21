@@ -6,12 +6,12 @@ import os
 
 
 DB_NAME = "bitcoin.db"
-DB_PATH = "/home/abid/www/bitcoin/"     # This is the path as it exists on the remote server.
 
 
 def db():
     """
     :return: A File object that refers to the SQLITE3 database.
     """
+    cwd = os.path.abspath(os.path.dirname(__file__))            # Get the current directory which contains this file
 
-    return os.path.join(DB_PATH, DB_NAME)
+    return os.path.join(cwd, DB_NAME)
