@@ -32,14 +32,13 @@ $(function() {
     // We get the current time in milliseconds and convert it to seconds
     var now = Math.floor( (new Date).getTime() / 1000 );
 
-    // We calculate the timestamp for 2 days ago which is how long we want the graph to cover:
-    var threshold = now - (86400 * 2);
+    // We calculate the timestamp for 8 days ago which is how long we want the graph to cover:
+    var threshold = now - (86400 * 8);
 
     // Construct the URL that will fetch the price data.
-    var data_url = 'http://www.abid-mujtaba.name:8080/bitcoin/api/since/'.concat(threshold, '/');
+    var data_url = 'https://marzipan.whatbox.ca:3983/bitcoin/api/since/'.concat(threshold, '/');
 
 
-/*
     $.getJSON(data_url, function(data) {
 
     // We create lists to contain the graph data points. We will populate them below:
@@ -79,14 +78,6 @@ $(function() {
 
             buttons: [{
                 type: 'minute',
-                count: 60,
-                text: '1h'
-            }, {
-                type: 'minute',
-                count: 120,
-                text: '2h'
-            }, {
-                type: 'minute',
                 count: 360,
                 text: '6h'
             }, {
@@ -97,6 +88,14 @@ $(function() {
                 type: 'day',
                 count: 1,
                 text: '1d'
+            }, {
+                type: 'day',
+                count: 2,
+                text: '2d'
+            }, {
+                type: 'day',
+                count: 4,
+                text: '4d'
             }, {
                 type: 'all',
                 text: 'All'
@@ -148,14 +147,13 @@ $(function() {
 
         });
     });
-*/
 
 
     // We setup a repeated function call every 1 minute to update the prices
 
     setInterval(function() {
 
-        // We make an AJAX POST call to fetch the current price. We use POST here because POSTs are never cached.
+        // We make an AJAX POST call to fetch the current price.
         fetch_current_price();
 
     }, 1 * 60 * 1000);      // Set interval in milliseconds
@@ -179,6 +177,8 @@ $(function() {
 
 function fetch_current_price()
 {
+    // We use POST here because POSTs are never cached.
+
     $.post("https://marzipan.whatbox.ca:3983/bitcoin/api/current/", {}, function(data, status) {
 
     update_prices(data['b'], data['s']);        // Update Current Price header
