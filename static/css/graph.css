@@ -15,13 +15,13 @@
     z-index:-1;
 }
 
-p.alignleft
+p.left
 {
     float: left;
     margin-left: 5%;
 }
 
-p.alignright
+p.right
 {
     float: right;
     margin-right: 5%;

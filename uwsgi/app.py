@@ -22,6 +22,7 @@ logger.setLevel(logging.DEBUG)
 
 import current
 import error
+import graph
 import recent
 
 # We define the valid routes of the bitcoin uwsgi application using "routes":
@@ -38,10 +39,8 @@ router.connect(None, '/bitcoin/current/', handler=current.handle)
 # router.connect(None, '/bitcoin/api/current/', handler = api.current.handle)
 # router.connect(None, '/bitcoin/api/buy/current/', handler = api.buy.current.handle)
 # router.connect(None, '/bitcoin/api/sell/current/', handler = api.sell.current.handle)
-#
-# router.connect(None, '/bitcoin/graph/', handler = graph.handle)
-# router.connect(None, '/bitcoin/graph/buy/', handler = graph.handle_buy)
-# router.connect(None, '/bitcoin/graph/sell/', handler = graph.handle_sell)
+
+router.connect(None, '/bitcoin/graph/', handler=graph.handle)
 
 
 def application(env, start_response):
