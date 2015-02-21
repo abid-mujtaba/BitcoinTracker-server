@@ -40,7 +40,12 @@ def get_template(f, name):
 
     # Load the jinja2 template in preparation for rendering:
     templateLoader = jinja2.FileSystemLoader( searchpath="/" )      # We specify that we will be using absolute paths to specify the location of the template file
-    templateEnv = jinja2.Environment( loader=templateLoader )
+
+    # We specify that '#' is the line statement prefix so that one can use '# for row in rows:' instead of '{* for row in rows %}
+    # We specify that '##' is the line comment prefix so we can start comments with '##'
+    # These specifications make writing jinja2 templates easier and clearer.
+
+    templateEnv = jinja2.Environment( loader=templateLoader, line_statement_prefix='#', line_comment_prefix='##' )
 
     parent = get_parent_dir(f)      # Get absolute path of parent directory of current directory
 
