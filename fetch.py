@@ -3,6 +3,7 @@ Fetches the current price from the bitstamp ticker and stores it in the sqlite3 
 """
 
 import client
+import rules
 import settings
 
 from datetime import datetime
@@ -19,7 +20,7 @@ def main():
 
     now = int(time.time())          # The current time as of this fetch
 
-    if len(sys.argv) > 1 and sys.argv[1] == '--insert':     # Insertion only occurs if the --insert switch is specified
+    if '--insert' in sys.argv[1:]:     # Insertion only occurs if the --insert switch is specified
 
         conn = sqlite3.connect(settings.db())
         cursor = conn.cursor()
@@ -35,6 +36,12 @@ def main():
 
         print("{} :-  Buy: {} - Sell: {}".format(ts, buy, sell))
 
+    # If the --rules switch is specified we execute all the rules specified
+    if '--rules' in sys.argv[1:]:
+
+        for rule in rules.RULES:
+
+            rule.execute(float(buy), float(sell))
 
 
 
