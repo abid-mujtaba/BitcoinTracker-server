@@ -1,8 +1,21 @@
 # BitcoinTracker-server
 
-A remote python uwsgi server that serves bitcoin price information.
+A remote python uwsgi server that serves bitcoin price information. It has the additional capability to sending Android GCM Push Notifications when the price crosses certain specified limits. (This ability can easily be turned off by commenting out the section concerning **rules** in ``fetch.py``).
 
 This repo is where the server is developed. The Makefile specifies how this code is deployed remotely. Its remote layout will not match the code layout in this repo.
+
+## Secrets
+
+For GCM Push Notifications to work there needs to be a ``secrets.py`` file in the root folder (same level as ``fetch.py``) from which the project imports various secret credentials and user-specified values.
+
+To date the values that need to be specified in ``secrets.py`` are:
+
+* API_KEY           (GCM API Key for the Android Project that handles Push Notifications)
+* DEV_REG_ID        (GCM Registration ID of the Android device that is meant to receive the Push Notifications)
+* LOW_PRICE         (The low threshold. When the buy price dips below this a Push Notification is sent)
+* HIGH_PRICE        (The high threhold. When the sell price exceeds this a Push Notification is sent)
+
+Note: If you do not wish to have GCM Push capability then you can simply comment out all code that makes reference to the ``secrets`` module, which locations are minimal.
 
 ## Setup / Configuration
 
@@ -13,7 +26,6 @@ Thankfully Whatbox has installed and provides access to an nginx utility so I ca
 /usr/sbin/nginx -c <path to config> &> /dev/null
 
 (the nginx config file is included in this repo as well as the mimes.conf file that is required for CSS to work).
-
 
 uwsgi on the other hand does come pre-installed (like nginx) but it doesn't have python support compiled in to it. This means I had to roll out my own version of uwsgi in userspace. This was made remarkably easy thanks to virtualenv.
 
@@ -65,3 +77,11 @@ and
 ``killall -s INT uwsgi``
 
 Uwsgi takes more effort since a simple ``killall`` results in the uwsgi processes respawning.
+
+
+
+### Interfacing with Android GCM
+
+The server has the ability to send GCM Push Notifications when the price crosses certain thresholds (sell price exceeds some value or buy price falls below a cerain threshold). For this to work you need an Android application that has GCM set up inside it. It will have a Registration ID which you will need to specify in the ``secrets.py`` file.
+
+The repo (BitcoinTracker)[https://github.com/abid-mujtaba/BitcoinTracker] gives the Android code of an application that implements this GCM capability.
