@@ -84,4 +84,4 @@ Uwsgi takes more effort since a simple ``killall`` results in the uwsgi processe
 
 The server has the ability to send GCM Push Notifications when the price crosses certain thresholds (sell price exceeds some value or buy price falls below a cerain threshold). For this to work you need an Android application that has GCM set up inside it. It will have a Registration ID which you will need to specify in the ``secrets.py`` file.
 
-The repo (BitcoinTracker)[https://github.com/abid-mujtaba/BitcoinTracker] gives the Android code of an application that implements this GCM capability.
+The repo [BitcoinTracker](https://github.com/abid-mujtaba/BitcoinTracker) gives the Android code of an application that implements this GCM capability.
