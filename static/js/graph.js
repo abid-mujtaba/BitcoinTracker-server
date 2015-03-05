@@ -18,9 +18,6 @@ $(function() {
         return content;
     };
 
-    // Fetch the current price and show it in the header
-    fetch_current_price();
-
     // We force Highcharts to use local time for the time-axis:
     Highcharts.setOptions({
         global: {
@@ -149,6 +146,10 @@ $(function() {
     });
 
 
+    // Fetch the current price and show it in the header
+    fetch_current_price();
+
+
     // We setup a repeated function call every 1 minute to update the prices
 
     setInterval(function() {
@@ -171,7 +172,6 @@ $(function() {
         flag_title_buy = false;
         update_title(gbuy, gsell);
     });
-
 });
 
 
