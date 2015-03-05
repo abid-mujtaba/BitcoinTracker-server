@@ -9,3 +9,6 @@
 
 # Ignore the secrets.py where we store confidential information
 secrets.py
+
+# Temporrary files created by the BlueFish editor
+*~
