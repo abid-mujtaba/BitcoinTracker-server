@@ -106,6 +106,10 @@ $(function() {
         title : {
             text : 'BTC Prices'
         },
+        
+        xAxis: {
+				ordinal: false,			// All points are no longer equally separated. The position depends upon the x-value specified (useful for irregularly spaced data)        
+        },
 
         // Move y-axis to the opposite (right) side and shifts if slightly more right to keep it off the chart
         yAxis: {
@@ -163,6 +167,16 @@ $(function() {
                         series[1].addPoint([t,s], true, true);			// true, true means update graph and shift it as well
                                                 
                     }, 1 * 60 * 1000);      // Set interval in milliseconds
+                },
+                
+                click: function(e) {
+								
+								var series = this.series;
+								
+								var len = series[0].xData.length;
+								
+								series[0].data[len - 1].remove();
+								series[1].data[len - 1].remove();          
                 }
             }
         }
