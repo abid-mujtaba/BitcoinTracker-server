@@ -1,5 +1,5 @@
 var flag_title_buy = false;
-var gbuy, gsell;
+var gtime, gbuy, gsell;					// Global variables for storing values of time and prices
 
 
 $(function() {
@@ -142,23 +142,37 @@ $(function() {
 
         tooltip: { valueDecimals: 2 },
 
+        chart: {
+            events: {
+                load: function() {
+                	
+                	  var series = this.series;			// Get handle on the chart's series object which we will use in the inner function
+
+						  // We fetch current bitcoin price information every 1 minute and update the graph and prices accordingly
+                    setInterval(function() {
+
+                        // We make an AJAX POST call to fetch the current price.
+                        var data = fetch_current_price();
+
+                        var t = data[0], b = data[1], s = data[2];
+                        
+    							update_prices(b, s);        // Update Current Price header
+    							update_title(b, s);
+                        
+                        series[0].addPoint([t,b], false, false);
+                        series[1].addPoint([t,s], true, true);			// true, true means update graph and shift it as well
+                                                
+                    }, 1 * 60 * 1000);      // Set interval in milliseconds
+                }
+            }
+        }
+
         });
     });
 
 
     // Fetch the current price and show it in the header
     fetch_current_price();
-
-
-    // We setup a repeated function call every 1 minute to update the prices
-
-    setInterval(function() {
-
-        // We make an AJAX POST call to fetch the current price.
-        fetch_current_price();
-
-    }, 1 * 60 * 1000);      // Set interval in milliseconds
-
 
     // We set up callbacks for clicking the current buy and sell price, using these to change the price displayed in the document title
     $('#buy').click(function() {
@@ -178,12 +192,15 @@ $(function() {
 function fetch_current_price()
 {
     // We use POST here because POSTs are never cached.
-
+    
     $.post("https://marzipan.whatbox.ca:3983/bitcoin/api/current/", {}, function(data, status) {
 
-    update_prices(data['b'], data['s']);        // Update Current Price header
-    update_title(data['b'], data['s']);
+    gbuy = data['b'];
+    gsell = data['s'];
+    gtime = data['t'] * 1000;
     });
+    
+    return [gtime, gbuy, gsell];
 }
 
 
