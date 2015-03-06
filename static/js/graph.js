@@ -174,18 +174,6 @@ $(function() {
 						  // We fetch current bitcoin price information every 1 minute, starting now, and update the graph and prices accordingly
 						  update();
                     setInterval(update, 1 * 60 * 1000);      // Set interval in milliseconds
-                },
-                
-                click: function(e) {
-								
-								var series = this.series;
-								
-								var len = series[0].xData.length;
-								
-								console.log("time: " + series[0].xData[len- 1]);								
-								
-//								series[0].data[len - 1].remove();
-//								series[1].data[len - 1].remove();          
                 }
             }
         }
