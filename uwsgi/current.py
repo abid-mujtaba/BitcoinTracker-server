@@ -15,7 +15,9 @@ def handle(start_response, route):
     We pass in the function "start_response" which when called triggers the start of the response.
     """
 
-    ts, buy, sell = fetch_current()
+    t, buy, sell = fetch_current()
+
+    ts = common.format_time(t)          # Convert time integer to string
 
     template = common.get_template('current.html')
 
@@ -42,6 +44,4 @@ def fetch_current():
 
     now = int(time.time())        # Get current unix time
 
-    ts = common.format_time(now)
-
-    return ts, buy, sell
+    return now, buy, sell
